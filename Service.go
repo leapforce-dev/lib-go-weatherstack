@@ -68,7 +68,7 @@ func (service *Service) httpRequest(httpMethod string, endpoint string, values u
 	values.Add("access_key", service.accessKey)
 
 	url := fmt.Sprintf("%s/%s?%s", APIURL, endpoint, values.Encode())
-	//fmt.Println(url)
+	fmt.Println(url)
 
 	buffer := new(bytes.Buffer)
 	buffer = nil

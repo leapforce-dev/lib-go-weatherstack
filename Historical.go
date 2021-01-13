@@ -79,16 +79,16 @@ type CurrentWeather struct {
 }
 
 type HistoricalWeather struct {
-	Date          string          `json:"date"`
-	DateEpoch     int64           `json:"date_epoch"`
-	Astro         Astro           `json:"astro"`
-	MinTemp       int             `json:"mintemp"`
-	MaxTemp       int             `json:"maxtemp"`
-	AvgTemp       int             `json:"avgtemp"`
-	TotalSnow     int             `json:"totalsnow"`
-	SunHour       float64         `json:"sunhour"`
-	UVIndex       int             `json:"uv_index"`
-	HourlyWeather []HourlyWeather `json:"hourly"`
+	Date      string          `json:"date"`
+	DateEpoch int64           `json:"date_epoch"`
+	Astro     Astro           `json:"astro"`
+	MinTemp   int             `json:"mintemp"`
+	MaxTemp   int             `json:"maxtemp"`
+	AvgTemp   int             `json:"avgtemp"`
+	TotalSnow int             `json:"totalsnow"`
+	SunHour   float64         `json:"sunhour"`
+	UVIndex   int             `json:"uv_index"`
+	Hourly    []HourlyWeather `json:"hourly"`
 }
 
 type Astro struct {
@@ -147,7 +147,7 @@ func (service *Service) GetHistoricalWeather(params GetHistoricalWeatherParams) 
 
 	startDate := params.StartDate.Truncate(24 * time.Hour)
 
-	if params.EndDate != nil {
+	if params.EndDate == nil {
 		values.Add("historical_date", startDate.Format(DateFormat))
 	} else {
 		endDate := params.EndDate.Truncate(24 * time.Hour)
@@ -165,6 +165,8 @@ func (service *Service) GetHistoricalWeather(params GetHistoricalWeatherParams) 
 		values.Add("historical_date_start", startDate.Format(DateFormat))
 		values.Add("historical_date_end", endDate.Format(DateFormat))
 	}
+
+	values.Add("query", params.Query)
 
 	if params.Hourly != nil {
 		values.Add("hourly", fmt.Sprintf("%v", int(*params.Hourly)))
