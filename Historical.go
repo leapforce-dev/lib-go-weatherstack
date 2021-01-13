@@ -69,7 +69,7 @@ type CurrentWeather struct {
 	WindDegree          int      `json:"wind_degree"`
 	WindDir             string   `json:"wind_dir"`
 	Pressure            int      `json:"pressure"`
-	Precip              int      `json:"precip"`
+	Precip              float64  `json:"precip"`
 	Humidity            int      `json:"humidity"`
 	Cloudcover          int      `json:"cloudcover"`
 	FeelsLike           int      `json:"feelslike"`
@@ -85,7 +85,7 @@ type HistoricalWeather struct {
 	MinTemp   int             `json:"mintemp"`
 	MaxTemp   int             `json:"maxtemp"`
 	AvgTemp   int             `json:"avgtemp"`
-	TotalSnow int             `json:"totalsnow"`
+	TotalSnow float64         `json:"totalsnow"`
 	SunHour   float64         `json:"sunhour"`
 	UVIndex   int             `json:"uv_index"`
 	Hourly    []HourlyWeather `json:"hourly"`
@@ -109,7 +109,7 @@ type HourlyWeather struct {
 	WeatherCode         int      `json:"weather_code"`
 	WeatherIcons        []string `json:"weather_icons"`
 	WeatherDescriptions []string `json:"weather_descriptions"`
-	Precip              int      `json:"precip"`
+	Precip              float64  `json:"precip"`
 	Humidity            int      `json:"humidity"`
 	Visibility          int      `json:"visibility"`
 	Pressure            int      `json:"pressure"`
