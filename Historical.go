@@ -5,8 +5,10 @@ import (
 	"net/url"
 	"time"
 
+	"cloud.google.com/go/civil"
 	errortools "github.com/leapforce-libraries/go_errortools"
 	go_http "github.com/leapforce-libraries/go_http"
+	utilities "github.com/leapforce-libraries/go_utilities"
 )
 
 type Hourly int
@@ -133,25 +135,25 @@ type HourlyWeather struct {
 	UVIndex             int      `json:"uv_index"`
 }
 
-type GetHistoricalWeatherParams struct {
+type GetHistoricalWeatherConfig struct {
 	Query     string
-	StartDate time.Time
-	EndDate   *time.Time
+	StartDate civil.Date
+	EndDate   *civil.Date
 	Hourly    *Hourly
 	Interval  *Interval
 	Units     *Units
 	Language  *string
 }
 
-func (service *Service) GetHistoricalWeather(params GetHistoricalWeatherParams) (*HistoricalResponse, *errortools.Error) {
+func (service *Service) GetHistoricalWeather(config GetHistoricalWeatherConfig) (*HistoricalResponse, *errortools.Error) {
 	values := url.Values{}
 
-	startDate := params.StartDate.Truncate(24 * time.Hour)
+	startDate := utilities.DateToTime(config.StartDate)
 
-	if params.EndDate == nil {
+	if config.EndDate == nil {
 		values.Add("historical_date", startDate.Format(DateFormat))
 	} else {
-		endDate := params.EndDate.Truncate(24 * time.Hour)
+		endDate := utilities.DateToTime(*config.EndDate)
 
 		if startDate.After(endDate) {
 			return nil, errortools.ErrorMessage("StartDate must be smaller or equal to EndDate.")
@@ -167,22 +169,22 @@ func (service *Service) GetHistoricalWeather(params GetHistoricalWeatherParams) 
 		values.Add("historical_date_end", endDate.Format(DateFormat))
 	}
 
-	values.Add("query", params.Query)
+	values.Add("query", config.Query)
 
-	if params.Hourly != nil {
-		values.Add("hourly", fmt.Sprintf("%v", int(*params.Hourly)))
+	if config.Hourly != nil {
+		values.Add("hourly", fmt.Sprintf("%v", int(*config.Hourly)))
 	}
 
-	if params.Interval != nil {
-		values.Add("interval", fmt.Sprintf("%v", int(*params.Interval)))
+	if config.Interval != nil {
+		values.Add("interval", fmt.Sprintf("%v", int(*config.Interval)))
 	}
 
-	if params.Units != nil {
-		values.Add("units", fmt.Sprintf("%s", string(*params.Units)))
+	if config.Units != nil {
+		values.Add("units", fmt.Sprintf("%s", string(*config.Units)))
 	}
 
-	if params.Language != nil {
-		values.Add("language", *params.Language)
+	if config.Language != nil {
+		values.Add("language", *config.Language)
 	}
 
 	historicalResponse := HistoricalResponse{}
