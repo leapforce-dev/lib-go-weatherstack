@@ -6,6 +6,7 @@ import (
 	"time"
 
 	errortools "github.com/leapforce-libraries/go_errortools"
+	go_http "github.com/leapforce-libraries/go_http"
 )
 
 type Hourly int
@@ -186,7 +187,12 @@ func (service *Service) GetHistoricalWeather(params GetHistoricalWeatherParams) 
 
 	historicalResponse := HistoricalResponse{}
 
-	_, _, e := service.Get("historical", values, &historicalResponse)
+	requestConfig := go_http.RequestConfig{
+		URL:           service.url(fmt.Sprintf("%s?%s", "historical", values.Encode())),
+		ResponseModel: &historicalResponse,
+	}
+
+	_, _, e := service.get(&requestConfig)
 	if e != nil {
 		return nil, e
 	}
