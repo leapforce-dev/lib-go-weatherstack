@@ -19,10 +19,10 @@ type Weather struct {
 }
 
 type Astro struct {
-	Sunrise          w_types.TimeString `json:"sunrise"`
-	Sunset           w_types.TimeString `json:"sunset"`
-	Moonrise         w_types.TimeString `json:"moonrise"`
-	Moonset          w_types.TimeString `json:"moonset"`
+	Sunrise          w_types.TimeStruct `json:"sunrise"`
+	Sunset           w_types.TimeStruct `json:"sunset"`
+	Moonrise         w_types.TimeStruct `json:"moonrise"`
+	Moonset          w_types.TimeStruct `json:"moonset"`
 	MoonPhase        string             `json:"moon_phase"`
 	MoonIllumination int64              `json:"moon_illumination"`
 }

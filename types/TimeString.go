@@ -18,7 +18,9 @@ func (d *TimeString) UnmarshalJSON(b []byte) error {
 		return err
 	}
 
-	if strings.Trim(unquoted, " ") == "" {
+	unquoted = strings.Trim(unquoted, " ")
+
+	if unquoted == "" {
 		d = nil
 		return nil
 	}
