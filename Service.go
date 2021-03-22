@@ -10,13 +10,11 @@ import (
 )
 
 const (
-	APIURL         string = "https://api.weatherstack.com"
-	DateFormat     string = "2006-01-02"
+	apiURL         string = "https://api.weatherstack.com"
+	dateFormat     string = "2006-01-02"
 	MaxDaysPerCall int    = 60
 )
 
-// type
-//
 type Service struct {
 	accessKey   string
 	httpService *go_http.Service
@@ -26,16 +24,23 @@ type ServiceConfig struct {
 	AccessKey string
 }
 
-func NewService(config ServiceConfig) (*Service, *errortools.Error) {
+func NewService(config *ServiceConfig) (*Service, *errortools.Error) {
+	if config == nil {
+		return nil, errortools.ErrorMessage("ServiceConfig must not be a nil pointer")
+	}
+
 	if config.AccessKey == "" {
 		return nil, errortools.ErrorMessage("AccessKey not provided")
 	}
 
-	httpServiceConfig := go_http.ServiceConfig{}
+	httpService, e := go_http.NewService(&go_http.ServiceConfig{})
+	if e != nil {
+		return nil, e
+	}
 
 	return &Service{
 		accessKey:   config.AccessKey,
-		httpService: go_http.NewService(httpServiceConfig),
+		httpService: httpService,
 	}, nil
 }
 
@@ -64,7 +69,7 @@ func (service *Service) httpRequest(httpMethod string, requestConfig *go_http.Re
 }
 
 func (service *Service) url(path string) string {
-	return fmt.Sprintf("%s/%s", APIURL, path)
+	return fmt.Sprintf("%s/%s", apiURL, path)
 }
 
 func (service *Service) get(requestConfig *go_http.RequestConfig) (*http.Request, *http.Response, *errortools.Error) {
