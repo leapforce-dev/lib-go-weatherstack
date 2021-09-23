@@ -10,6 +10,7 @@ import (
 )
 
 const (
+	apiName        string = "Weatherstack"
 	apiURL         string = "https://api.weatherstack.com"
 	dateFormat     string = "2006-01-02"
 	MaxDaysPerCall int    = 60
@@ -74,4 +75,20 @@ func (service *Service) url(path string) string {
 
 func (service *Service) get(requestConfig *go_http.RequestConfig) (*http.Request, *http.Response, *errortools.Error) {
 	return service.httpRequest(http.MethodGet, requestConfig)
+}
+
+func (service *Service) APIName() string {
+	return apiName
+}
+
+func (service *Service) APIKey() string {
+	return service.accessKey
+}
+
+func (service *Service) APICallCount() int64 {
+	return service.httpService.RequestCount()
+}
+
+func (service *Service) APIReset() {
+	service.httpService.ResetRequestCount()
 }
