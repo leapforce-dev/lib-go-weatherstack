@@ -73,7 +73,7 @@ func (service *Service) GetHistoricalWeather(config GetHistoricalWeatherConfig) 
 	historicalResponse := HistoricalResponse{}
 
 	requestConfig := go_http.RequestConfig{
-		URL:           service.url(fmt.Sprintf("historical?%s", values.Encode())),
+		Url:           service.url(fmt.Sprintf("historical?%s", values.Encode())),
 		ResponseModel: &historicalResponse,
 	}
 

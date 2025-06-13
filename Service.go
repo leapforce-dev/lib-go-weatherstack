@@ -46,21 +46,21 @@ func NewService(config *ServiceConfig) (*Service, *errortools.Error) {
 }
 
 func (service *Service) httpRequest(httpMethod string, requestConfig *go_http.RequestConfig) (*http.Request, *http.Response, *errortools.Error) {
-	// add API key
-	_url, err := url.Parse(requestConfig.URL)
+	_url, err := url.Parse(requestConfig.Url)
 	if err != nil {
 		return nil, nil, errortools.ErrorMessage(err)
 	}
 	query := _url.Query()
 	query.Set("access_key", service.accessKey)
 
-	(*requestConfig).URL = fmt.Sprintf("%s://%s%s?%s", _url.Scheme, _url.Host, _url.Path, query.Encode())
+	(*requestConfig).Url = fmt.Sprintf("%s://%s%s?%s", _url.Scheme, _url.Host, _url.Path, query.Encode())
+	requestConfig.Method = httpMethod
 
 	// add error model
 	errorResponse := ErrorResponse{}
 	(*requestConfig).ErrorModel = &errorResponse
 
-	request, response, e := service.httpService.HTTPRequest(httpMethod, requestConfig)
+	request, response, e := service.httpService.HttpRequest(requestConfig)
 
 	if errorResponse.Error.Info != "" {
 		e.SetMessage(errorResponse.Error.Info)

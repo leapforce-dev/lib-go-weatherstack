@@ -52,7 +52,7 @@ func (service *Service) GetForecastWeather(config GetForecastWeatherConfig) (*Fo
 	forecastResponse := ForecastResponse{}
 
 	requestConfig := go_http.RequestConfig{
-		URL:           service.url(fmt.Sprintf("forecast?%s", values.Encode())),
+		Url:           service.url(fmt.Sprintf("forecast?%s", values.Encode())),
 		ResponseModel: &forecastResponse,
 	}
 
